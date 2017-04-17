@@ -1,0 +1,65 @@
+<!--suppress ALL -->
+<div class="title-block">
+    <h3 class="title"> Edit Website </h3>
+</div>
+<div class="card card-block" id="submit-site">
+    <form method="POST" action="/admin/crawler/updateWebsite" role="form" id="sites-form">
+        <input type="hidden" name="id" v-model="site.id">
+        <div class="alert " v-if="Message" v-bind:class="HasError ? 'alert-danger' : 'alert-success' " >
+            <a id="my-close" href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            {{Message}}
+        </div>
+        <div class="form-group" v-bind:class=" errors.name ? 'has-error' : '' ">
+            <label class="control-label text-success" v-bind:class=" errors.name ? 'text-danger' : 'text-success' " for="siteName">Name</label>
+            <input type="text" name="name" class="form-control underlined" v-model="site.name" id="siteName">
+            <span class="has-error" v-if="errors.name">{{ errors.name }}</span>
+        </div>
+        <div class="form-group" v-bind:class=" errors.continent ? 'has-error' : '' ">
+            <label class="control-label text-success" v-bind:class=" errors.continent ? 'text-danger' : 'text-success' " for="siteContinent">Continent</label>
+            <input type="text" name="continent" class="form-control underlined" v-model="site.continent" id="siteContinent">
+            <span class="has-error" v-if="errors.continent">{{ errors.continent }}</span>
+        </div>
+        <div class="form-group" v-bind:class=" errors.country ? 'has-error' : '' ">
+            <label class="control-label text-success" for="siteCountry" v-bind:class=" errors.country ? 'text-danger' : 'text-success' ">Country</label>
+            <input type="text" name="country" class="form-control underlined" v-model="site.country" @keyup.enter="updateSite" id="editSite">
+            <span class="has-error" v-if="errors.country">{{ errors.country }}</span>
+        </div>
+        <div class="col-sm-4 push-sm-4">
+            <input type="submit" value="Save" @click.prevent="updateSite" class="btn btn-lg btn-primary">
+        </div>
+    </form>
+</div>
+
+
+<script type="application/javascript">
+
+    new Vue({
+        el: '#submit-site',
+        data:{
+            site: <?= $site_data ?>,
+            errors: [],
+        },
+        props: [
+            'HasError',
+            'Message',
+        ],
+        methods: {
+            updateSite: function () {
+
+                let site = this.site;
+                this.$http.post('/admin/crawler/updateWebsite', site, {}).then((response) => {
+                    if(response.data.error == true) {
+                        this.HasError = true;
+                        this.errors = response.data.errors;
+                        this.Message  = response.data.message;
+                    } else{
+                        this.errors = [];
+                        this.HasError = false;
+                        this.Message = response.data.message;
+                        setTimeout(function(){ location.href = "/admin/crawler/allWebsite" } , 1000);
+                    }
+                });
+            }
+        }
+    })
+</script>

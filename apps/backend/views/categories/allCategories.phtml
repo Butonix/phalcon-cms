@@ -1,0 +1,72 @@
+<?php
+//print_r($data);
+//die;
+?>
+<div class="title-block">
+    <div class="col-sm-6">
+        <h3 class="title">All categories</h3>
+    </div>
+    <div class="col-sm-6 pull-right">
+        <?= \Phalcon\Tag::linkTo(["/admin/categories/createCategory", ' Add category', 'class' => 'btn btn-primary btn-lg pull-right text-capitalize btn-all-sites']) ?>
+    </div>
+</div>
+
+<div class="card card-block" id="categories">
+    <div><?php $this->flashSession->output() ?></div>
+    <div id="accordion" role="tablist" aria-multiselectable="true">
+    <?php
+        $counter = 0;
+        foreach ($data as $key => $parents):
+//            var_dump($parents);
+//        die;
+
+    ?>
+        <div class="card">
+            <div class="card-header" role="tab" id="heading<?= $counter ?>">
+                <h3 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $counter ?>" aria-expanded="true" aria-controls="collapse<?= $counter ?>">
+                        <?= $key ?>
+                        <?php echo \Phalcon\Tag::linkTo(["/admin/categories/editCategory/".$parents[0]['primary_category_id'], 'class' => 'btn btn-info btn-sm fa fa-edit']) ?>
+                        <?php echo \Phalcon\Tag::linkTo(["/admin/categories/delete/".$parents[0]['primary_category_id'], 'class' => 'btn btn-danger btn-sm fa fa-trash']) ?>
+                    </a>
+                </h3>
+            </div>
+            <?php
+            if(!empty($parents[0]['child_id'])):
+                ?>
+                <div id="collapse<?= $counter ?>" class="collapse show" role="tabpanel" aria-labelledby="heading<?= $counter ?>">
+                    <div class="card-block">
+
+                        <table class="table table-hover table-sites">
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            <?php  foreach ($parents as $children): ?>
+                                <tr>
+                                    <td><?= $children['child_id']; ?></td>
+                                    <td><?= $children['child_name']; ?></td>
+                                    <td><?= \Phalcon\Tag::linkTo(["/admin/categories/editCategory/".$children['child_id'], 'class' => 'btn btn-info btn-sm fa fa-edit', 'id' => 'edit-category']) ?></td>
+                                    <td><?= \Phalcon\Tag::linkTo(["/admin/categories/delete/".$children['child_id'], 'class' => 'btn btn-danger btn-sm fa fa-trash']) ?></td>
+
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    <?php
+        $counter++;
+        endforeach;
+    ?>
+    </div>
+
+
+
+</div>
+
+

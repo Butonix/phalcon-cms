@@ -1,0 +1,70 @@
+<!--suppress ALL -->
+<div class="title-block">
+    <h3 class="title"> Add new <span class="sparkline bar" data-type="bar">category</span> </h3>
+</div>
+<div class="card card-block" id="submit-category" v-cloak >
+    <form method="POST" action="" role="form" id="categorys-form">
+        <div class="alert " v-if="Message" v-bind:class="HasError ? 'alert-danger' : 'alert-success' " >
+            <a id="my-close" href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            {{Message}}
+        </div>
+
+        <div class="form-group" v-bind:class=" errors.name ? 'has-error' : '' ">
+            <label class="control-label" v-bind:class=" errors.name ? 'text-danger' : 'text-success' " for="categoryName">category Name:</label>
+            <input type="text" class="form-control underlined" name="name" placeholder="Name of category" id="categoryName" v-model="post_data.name">
+            <span class="has-error" v-if="errors.name">{{ errors.name }}</span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="url">Parent Category:</label>
+            <select type="select" class="form-control underlined" name="category_name"  id="category_name" v-model="post_data.id">
+                <option value="0"></option>
+                <option v-for="category in categories" :value="category.id">
+                    {{ category.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-sm-4 push-sm-4">
+            <button type="submit" @click.prevent="addcategory" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/backend/js/countries.js"></script>
+<script type="application/javascript">
+
+    new Vue({
+        el: '#submit-category',
+        data:{
+            post_data: {
+                name: '',
+                id: ''
+            },
+            categories: JSON.parse('<?= $categories ?>'),
+            errors: [],
+        },
+        props: [
+            'HasError',
+            'Message',
+        ],
+
+        methods: {
+            addcategory: function () {
+
+                let category = this.post_data;
+                this.$http.post('/admin/categories/createCategory', category, {}).then((response) => {
+                    if(response.data.error == true) {
+                    this.HasError = true;
+                    this.errors = response.data.errors;
+                    this.Message  = response.data.message;
+                } else{
+                    this.errors = [];
+                    this.HasError = false;
+                    this.Message = response.data.message;
+                }
+            });
+            }
+        }
+    })
+</script>

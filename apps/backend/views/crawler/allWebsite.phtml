@@ -1,0 +1,42 @@
+<div id="sites">
+    <?= \Phalcon\Tag::linkTo(["/admin/crawler/createWebsite", ' Add website', 'class' => 'btn btn-primary btn-lg pull-right text-capitalize btn-all-sites']) ?>
+    <table class="table table-hover table-sites">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Continent</th>
+            <th>Country</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <?php foreach ($page->items as $item) { ?>
+            <tr>
+                <td><?= $item->id; ?></td>
+                <td><?= $item->name; ?></td>
+                <td><?= $item->continent; ?></td>
+                <td><?= $item->country; ?></td>
+                <!-- TODO: Napraviti created i modified. trenutno puca zbog sto u bazi se ne upisuje lepo vreme -> u modelu treba da se namesti automatsko upisivanje za created i modified!!! -->
+                <td><?= $item->created_at; ?></td>
+                <td><?= $item->modified_at ?></td>
+                <td><?= \Phalcon\Tag::linkTo(["/admin/crawler/editWebsite/".$item->id, 'class' => 'btn btn-info btn-sm fa fa-edit']) ?></td>
+                <td><?= \Phalcon\Tag::linkTo(["/admin/crawler/deleteWebsite/".$item->id, 'class' => 'btn btn-danger btn-sm fa fa-trash']) ?></td>
+
+            </tr>
+        <?php } ?>
+    </table>
+<?php  ?>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link nav-link" href="/admin/crawler/allWebsite">First</a></li>
+            <li class="page-item"><a class="page-link nav-link" href="/admin/crawler/allWebsite?page=<?= $page->before; ?>">Previous</a></li>
+            <li class="page-item"><a class="page-link nav-link" href="/admin/crawler/allWebsite?page=<?= $page->next; ?>">Next</a></li>
+            <li class="page-item"><a class="page-link nav-link" href="/admin/crawler/allWebsite?page=<?= $page->last; ?>">Last</a></li>
+        </ul>
+    </nav>
+
+    <?php echo "You are in page ", $page->current, " of ", $page->total_pages; ?>
+
+</div>
+

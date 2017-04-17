@@ -1,0 +1,82 @@
+ <!--suppress ALL -->
+ <div class="title-block">
+        <h3 class="title"> Add new <span class="sparkline bar" data-type="bar">site</span> </h3>
+</div>
+<div class="card card-block" id="submit-site" v-cloak >
+    <form method="POST" action="" role="form" id="sites-form">
+        <div class="alert " v-if="Message" v-bind:class="HasError ? 'alert-danger' : 'alert-success' " >
+            <a id="my-close" href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            {{Message}}
+        </div>
+
+        <div class="form-group" v-bind:class=" errors.name ? 'has-error' : '' ">
+            <label class="control-label" v-bind:class=" errors.name ? 'text-danger' : 'text-success' " for="siteName">Site Name:</label>
+            <input type="text" v-model="site.name" class="form-control underlined" name="name" placeholder="Name of site" id="siteName">
+            <span class="has-error" v-if="errors.name">{{ errors.name }}</span>
+        </div>
+
+        <div class="form-group" v-bind:class=" errors.continent ? 'has-error' : '' ">
+            <label class="control-label" v-bind:class=" errors.continent ? 'text-danger' : 'text-success' " for="siteContinent">Continent:</label>
+            <input type="text" v-model="site.continent" class="form-control underlined" name="continent" id="siteContinent" placeholder="Continent">
+            <span class="has-error" v-if="errors.continent">{{ errors.continent }}</span>
+        </div>
+
+        <div class="form-group" v-bind:class=" errors.country ? 'has-error' : '' ">
+            <label class="control-label" v-bind:class=" errors.country ? 'text-danger' : 'text-success' " for="siteCountry">Country:</label>
+            <input type="text" v-model="site.country" @keyup.enter="addSite" class="form-control underlined" name="country" id="siteCountry" placeholder="Country">
+            <span class="has-error" v-if="errors.country">{{ errors.country }}</span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="url">Country:</label>
+            <select type="select" class="form-control underlined" name="site_name"  id="site_name">
+                <option v-for="country in countries" v-model="country.name">
+                    {{ country.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-sm-4 push-sm-4">
+            <button type="submit" @click.prevent="addSite" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/backend/js/countries.js"></script>
+<script type="application/javascript">
+
+  new Vue({
+     el: '#submit-site',
+     data:{
+         site: {
+             name: "",
+             continent: "",
+             country: ""
+         },
+         countries: countries,
+         errors: [],
+     },
+     props: [
+         'HasError',
+         'Message',
+     ],
+
+     methods: {
+         addSite: function () {
+
+             let site = this.site;
+             this.$http.post('/admin/crawler/createWebsite', site, {}).then((response) => {
+                 if(response.data.error == true) {
+                     this.HasError = true;
+                     this.errors = response.data.errors;
+                     this.Message  = response.data.message;
+                 } else{
+                     this.errors = [];
+                     this.HasError = false;
+                     this.Message = response.data.message;
+                 }
+             });
+         }
+     }
+ })
+</script>

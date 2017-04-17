@@ -1,0 +1,37 @@
+<aside class="sidebar">
+    <div class="sidebar-container">
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="logo"> <span class="l l1"></span> <span class="l l2"></span> <span class="l l3"></span> <span class="l l4"></span> <span class="l l5"></span> </div> Modular Admin </div>
+        </div>
+        <nav class="menu">
+            <ul class="nav metismenu" id="sidebar-menu">
+                <li class="<?= ($this->router->getControllerName()) == 'session' ? 'active open' : '' ?>">
+                    <a href="/interno-cms/index"> <i class="fa fa-home"></i> Dashboard </a>
+                </li>
+                <li class="<?= ($this->router->getControllerName()) == 'crawler' ? 'active open' : '' ?>">
+                    <a href=""> <i class="fa fa-fighter-jet"></i> Interno Crawler <i class="fa arrow"></i> </a>
+                    <ul>
+                        <li>
+                            <?php echo \Phalcon\Tag::linkTo(["/admin/crawler/mission",'Give Crawler Mission']) ?>
+
+                        </li>
+                        <li>
+                            <?php echo \Phalcon\Tag::linkTo(["/admin/crawler/allWebsite",' All sites']) ?>
+
+                        </li>
+                    </ul>
+                </li>
+                <li class="<?= ($this->router->getControllerName()) == 'categories' ? 'active open' : '' ?>">
+                    <a href=""> <i class="fa fa-bar-chart"></i> Categories <i class="fa arrow"></i> </a>
+                    <ul>
+                        <li>
+                            <?php echo \Phalcon\Tag::linkTo(["/admin/categories/allCategories",' All categories']) ?>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <?php $this->partial("shared/footer"); ?>
+</aside>

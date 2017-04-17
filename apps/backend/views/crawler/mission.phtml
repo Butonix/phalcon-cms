@@ -1,0 +1,126 @@
+<div class="title-block">
+    <h3 class="title">Add site to track</h3>
+</div>
+<div class="card card-block" id="submit-site">
+    <form method="POST">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label" for="url">Site Name:</label>
+                <v-select :options="sites" v-model="content.site" class="control-label"></v-select>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label" for="url">Site Url:</label>
+                <input type="text" class="form-control underlined" v-model="content.siteUrl" name="url" placeholder="Url" id="url">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label" for="url">Category:</label>
+                <v-select label="label" :options="categories" v-model="content.category" class="control-label"></v-select>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label" for="subcategory">Subcategory:</label>
+                <v-select :options="categories" multiple v-model="content.subCategory" class="control-label"></v-select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label class="control-label" for="title">Title:</label>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="title_element" v-model="content.titleElement" class="form-control" placeholder="Title element">
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="title_class" v-model="content.titleClass" class="form-control" placeholder="Title class">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label class="control-label" for="company">Company name:</label>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="company_element" v-model="content.companyElement" class="form-control" placeholder="Company element">
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="company_class" v-model="content.companyClass" class="form-control" placeholder="Company class">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label class="control-label" for="description">Description:</label>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="description_element" v-model="content.descriptionElement" class="form-control" placeholder="Description element">
+            </div>
+            <div class="col-sm-6">
+                <input type="text" name="description_class" v-model="content.descriptionClass" class="form-control" placeholder="Description class">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <label class="control-label" for="description">Is cron:</label>
+                <input type="checkbox">
+            </div>
+            <div class="col-sm-6">
+                <vue-datetime-picker class="vue-picker1" name="picker1"
+                                     :model.sync="result1">
+                </vue-datetime-picker>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 push-sm-5">
+                <button type="submit" @click.prevent="addSite" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="application/javascript">
+    Vue.component('v-select', VueSelect.VueSelect);
+//    import DatetimePicker from './vue-datetime-picker';
+
+    new Vue({
+        el: '#submit-site',
+//        components: {
+//            "vue-datetime-picker": DatetimePicker
+//        },
+        data: {
+            categories: JSON.parse('<?= $categoryData ?>'),
+            sites: JSON.parse('<?= $sitesData ?>'),
+            content: {
+                siteName: '',
+                siteUrl: '',
+                titleElement: '',
+                titleClass: '',
+                companyElement: '',
+                companyClass: '',
+                descriptionElement: '',
+                descriptionClass: '',
+                category: [],
+                subCategory: []
+            },
+            result1: null
+        },
+        methods: {
+            addSite: function () {
+
+                let data = this.content;
+                this.$http.post('/admin/crawler/mission', data, {}).then((response) => {
+                    if(response.data.error == true) {
+                    this.HasError = true;
+                    this.errors = response.data.errors;
+                    this.Message  = response.data.message;
+                } else{
+                    this.errors = [];
+                    this.HasError = false;
+                    this.Message = response.data.message;
+                }
+            });
+            }
+        }
+    });
+</script>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <?php $this->partial("shared/head"); ?>
+</head>
+<body>
+<div class="main-wrapper">
+    <div class="app" id="app">
+        <!-- Header of page -->
+        <?php $this->partial("shared/header"); ?>
+        <!-- Sidebar menu -->
+        <?php $this->partial("shared/sidebar"); ?>
+        <article class="content dashboard-page">
+            <section class="section">
+                <!-- Page content -->
+                <?= $this->getContent(); ?>
+            </section>
+        </article>
+    </div>
+</div>
+<!-- Scripts -->
+<?php $this->partial("shared/scripts"); ?>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.nav-link {
+    text-decoration: none !important;
+}
+
+.btn-all-sites {
+    margin-bottom: 50px !important;
+}
+
+#sites-form .btn{
+    margin-top: 40px;
+    width: 100%;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.mb-0 a {
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.mb-0 a:hover {
+    text-decoration: none;
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<!--suppress ALL -->
+<html class="no-js" lang="en">
+
+<head>
+    <?php $this->partial("shared/head"); ?>
+</head>
+
+<body>
+
+<div class="auth">
+    <div class="auth-container">
+        <div class="card">
+            <header class="auth-header">
+                <h1 class="auth-title">
+                    <div class="logo"> <span class="l l1"></span> <span class="l l2"></span> <span class="l l3"></span> <span class="l l4"></span> <span class="l l5"></span> </div> Interno-CMS </h1>
+            </header>
+            <div class="auth-content" id="login-form" v-cloak>
+                <p><?php $this->flashSession->output() ?></p>
+                <p class="text-xs-center">LOGIN TO CONTINUE</p>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" v-model="username" class="form-control underlined" name="username" id="email" placeholder="Your username" required>                                  </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" v-model="password" @keyup.enter="login" class="form-control underlined" name="password" id="password" placeholder="Your password" required>
+                    </div>
+                    <div class="form-group"> <label for="remember">
+                            <input class="checkbox" id="remember" type="checkbox">
+                            <span>Remember me</span>
+                        </label>
+                    </div>
+                    <input type="hidden" name="token" value="<?= $this->security->getToken() ?>"/>
+                    <div class="form-group">
+                        <a type="submit" @click.prevent="login" class="btn btn-block btn-primary">Login</a>
+                        <div class="alert alert-danger alert-dismissable" v-if="responseError == true">
+                            <a id="my-close" href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                            {{responseMessage}}
+                        </div>
+                        <div class="alert alert-success" v-else-if="responseError == false">
+                            {{responseMessage}}
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="text-xs-center">
+            <a href="/" class="btn btn-secondary rounded btn-sm"> <i class="fa fa-arrow-left"></i> Back to website </a>
+        </div>
+    </div>
+</div>
+<!-- Reference block for JS -->
+<div class="ref" id="ref">
+    <div class="color-primary"></div>
+    <div class="chart">
+        <div class="color-primary"></div>
+        <div class="color-secondary"></div>
+    </div>
+
+</div>
+    <?php $this->partial("shared/scripts"); ?>
+
+    <script type="application/javascript">
+        new Vue({
+            el: '#login-form',
+            data:{
+                username: '',
+                password: '',
+                token: '<?= $this->security->getToken() ?>'
+            },
+            props: [
+                'responseError',
+                'responseMessage'
+            ],
+
+            methods:{
+                login: function () {
+
+                    var send_data = {username: this.username, password: this.password, token: this.token};
+                    this.$http.post('/interno-cms/login', send_data, {
+
+                    }).then((response) => {
+                        this.responseError = response.data.error,
+                        this.responseMessage = response.data.message;
+                            if(this.responseError == false){
+                                setTimeout(function(){location.href="index"} , 700);
+                            }
+                    })
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
