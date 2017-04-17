@@ -200,20 +200,20 @@ class Category extends Model
      */
     public function updateCategory($post_data)
     {
-        $nestedSet = new Category();
+            $nestedSet = self::findFirst($post_data->id);
+
         if ($post_data->name && $post_data->parent_id) {
 
             $root = $this->findFirst($post_data->parent_id);
             $nestedSet->name = $post_data->name;
-            $nestedSet->appendTo($root);
-            $old = $this->findFirst($post_data->id);
-            return $old->deleteNode();
+                return  $nestedSet->moveAsFirst($root);
+
 
         } else if ($post_data->name) {
 
             $nestedSet->findFirst($post_data->id);
             $nestedSet->name = $post_data->name;
-            return $nestedSet->saveNode();
+                return $nestedSet->saveNode();
         }
 
     }
