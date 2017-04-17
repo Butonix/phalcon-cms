@@ -35,39 +35,3 @@
         'controller' => 'session',
         'action'     => 'index',
     ])->setName('backend-index');
-
-//    ## route for crawler sites ##
-//    $router->add("/interno-cms/sites", [
-//        'module'     => 'backend',
-//        'controller' => 'crawler',
-//        'action'     => 'allWebsite',
-//    ])->setName('backend-crawler');
-//
-//    $router->add("/interno-cms/crawler/add-site", [
-//        'module'     => 'backend',
-//        'controller' => 'crawler',
-//        'action'     => 'createWebsite',
-//    ])->setName('backend-create-website');
-//
-//    $router->add("/interno-cms/update-site", [
-//    'module'     => 'backend',
-//    'controller' => 'crawler',
-//    'action'     => 'updateWebsite',
-//])->setName('backend-update-website');
-//
-;
-//    #Categories
-//    $router->add("/interno-cms/categories", [
-//        'module'     => 'backend',
-//        'controller' => 'categories',
-//        'action'     => 'allCategories',
-//    ])->setName('backend-categories');
-//
-//    $router->add("/interno-cms/categories/add", [
-//        'module'     => 'backend',
-//        'controller' => 'categories',
-//        'action'     => 'add',
-//    ])->setName('backend-categories-add');
-//
-//
-//
